@@ -29,6 +29,7 @@
 		"release:canary": "pnpm build && changeset publish --tag canary",
 		"setup:docs": "tsx scripts/setup-docs.ts",
 		"test": "turbo test",
+		"test:security": "tsx scripts/run-security-tests.ts",
 		"vercel-build": "tsx scripts/setup-docs.ts --vercel",
 		"version": "changeset version && pnpm install --lockfile-only",
 		"version:canary": "changeset version --snapshot canary && pnpm install --lockfile-only",

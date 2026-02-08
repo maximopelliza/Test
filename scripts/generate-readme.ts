@@ -311,7 +311,7 @@ For further information, guides, and examples visit the [reference documentation
  * @throws {SyntaxError} If readme.json or package.json contains invalid JSON
  * @throws {Error} If file write operations fail
  */
-async function generateReadmes() {
+export async function generateReadmes() {
 	const packagesDir = path.resolve(__dirname, '../packages');
 
 	if (!fssync.existsSync(packagesDir)) {
@@ -323,9 +323,13 @@ async function generateReadmes() {
 	const packageDirs = entries
 		.filter((d) => d.isDirectory())
 		.map((d) => d.name)
-		.filter((dir) =>
-			fssync.existsSync(path.join(packagesDir, dir, 'readme.json'))
-		);
+		.filter((dir) => {
+			if (dir.includes('..')) {
+				console.error(`Invalid directory name: ${dir}`);
+				return false;
+			}
+			return fssync.existsSync(path.join(packagesDir, dir, 'readme.json'));
+		});
 
 	for (const packageName of packageDirs) {
 		try {
@@ -367,7 +371,10 @@ async function generateReadmes() {
 	}
 }
 
-generateReadmes().catch((err) => {
-	console.error('Fatal error generating READMEs:', err);
-	process.exit(1);
-});
+// Only run if this is the main module
+if (import.meta.url === `file://${process.argv[1]}`) {
+	generateReadmes().catch((err) => {
+		console.error('Fatal error generating READMEs:', err);
+		process.exit(1);
+	});
+}
