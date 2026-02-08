@@ -1,0 +1,13 @@
+{
+	"name": "@c15t/scripts",
+	"version": "1.0.0",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"test": "vitest run"
+	},
+	"devDependencies": {
+		"@types/node": "^22.14.1",
+		"vitest": "^3.1.1"
+	}
+}
